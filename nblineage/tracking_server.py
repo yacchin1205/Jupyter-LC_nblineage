@@ -40,7 +40,7 @@ class TrackingServer(LoggingConfigurable):
 
     def _write_server_signature_file(self, sign_id):
         self.log.info("Writing server signature to %s", self.server_signature_file)
-        with io.open(self.server_signature_file, 'w') as f:
+        with io.open(self.server_signature_file, 'w', encoding='utf-8') as f:
             f.write(sign_id)
         return sign_id
 
@@ -53,6 +53,6 @@ class TrackingServer(LoggingConfigurable):
             with io.open(self.server_signature_file, 'r') as f:
                 return f.read()
         else:
-            sign_id = str(uuid1()).decode('utf-8')
+            sign_id = str(uuid1())
             self._write_server_signature_file(sign_id)
             return sign_id
