@@ -22,7 +22,7 @@ from traitlets.config.application import Application
 from traitlets import Unicode
 
 import nbformat
-import meme
+import .meme
 
 class ExtensionQuickSetupApp(BaseExtensionApp):
     """Installs and enables all parts of this extension"""
