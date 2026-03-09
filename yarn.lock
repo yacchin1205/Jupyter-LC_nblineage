@@ -2105,9 +2105,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/builder@npm:^4.5.5":
-  version: 4.5.5
-  resolution: "@jupyterlab/builder@npm:4.5.5"
+"@jupyterlab/builder@npm:^4.4.10":
+  version: 4.4.10
+  resolution: "@jupyterlab/builder@npm:4.4.10"
   dependencies:
     "@lumino/algorithm": ^2.0.4
     "@lumino/application": ^2.4.8
@@ -8886,7 +8886,7 @@ __metadata:
     "@babel/core": ^7.0.0
     "@babel/preset-env": ^7.0.0
     "@jupyterlab/application": ^4.0.3
-    "@jupyterlab/builder": ^4.5.5
+    "@jupyterlab/builder": ^4.4.10
     "@jupyterlab/testutils": ^4.0.0
     "@types/jest": ^29.2.0
     "@types/json-schema": ^7.0.11
