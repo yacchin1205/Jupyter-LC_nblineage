@@ -1,6 +1,3 @@
-import json
-from pathlib import Path
-# from notebook.base.handlers import IPythonHandler
 from jupyter_server.utils import url_path_join
 from .tracking_server import TrackingServer
 from . import handler
@@ -11,14 +8,6 @@ def _jupyter_labextension_paths():
         "src": "labextension",
         "dest": "nblineage"
     }]
-
-# nbextension
-def _jupyter_nbextension_paths():
-    return [dict(
-        section="notebook",
-        src="nbextension",
-        dest="nblineage",
-        require="nblineage/main")]
 
 # server extension
 def _jupyter_server_extension_points():

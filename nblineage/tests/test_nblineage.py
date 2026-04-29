@@ -1,6 +1,7 @@
 import unittest
 import os.path
 import io
+from unittest.mock import patch
 import nbformat
 try:
     from exceptions import SystemExit
@@ -11,6 +12,21 @@ except ImportError:
 import nblineage
 import nblineage.extensionapp
 import nblineage.meme as meme
+
+
+class _DummyApp:
+    instances = []
+
+    def __init__(self):
+        self.initialized_argv = None
+        self.started = False
+        self.__class__.instances.append(self)
+
+    def initialize(self, argv=None):
+        self.initialized_argv = argv
+
+    def start(self):
+        self.started = True
 
 class TestNbLineageApp(unittest.TestCase):
 
@@ -49,6 +65,30 @@ class TestNbLineageApp(unittest.TestCase):
         next_items = items[1:]
         next_items.append(None)
         return zip(prev_items, items, next_items)
+
+    def test_quick_setup_uses_server_extension_app_only(self):
+        _DummyApp.instances = []
+        app = nblineage.extensionapp.ExtensionQuickSetupApp()
+        app.argv = ['--sys-prefix']
+
+        with patch.object(nblineage.extensionapp, 'EnableServerExtensionApp', _DummyApp):
+            app.start()
+
+        self.assertEqual(1, len(_DummyApp.instances))
+        self.assertEqual(['--sys-prefix', '--py', 'nblineage'], _DummyApp.instances[0].initialized_argv)
+        self.assertTrue(_DummyApp.instances[0].started)
+
+    def test_quick_remove_uses_server_extension_app_only(self):
+        _DummyApp.instances = []
+        app = nblineage.extensionapp.ExtensionQuickRemovalApp()
+        app.argv = ['--sys-prefix']
+
+        with patch.object(nblineage.extensionapp, 'DisableServerExtensionApp', _DummyApp):
+            app.start()
+
+        self.assertEqual(1, len(_DummyApp.instances))
+        self.assertEqual(['--sys-prefix', '--py', 'nblineage'], _DummyApp.instances[0].initialized_argv)
+        self.assertTrue(_DummyApp.instances[0].started)
 
     def test_generate_meme_from_filename(self):
         gen = meme.MemeGenerator()

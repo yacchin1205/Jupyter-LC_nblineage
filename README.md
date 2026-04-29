@@ -8,18 +8,19 @@ Jupyter-LC\_nblineage is an extension that put tracking ID, which we call *meme*
 ## Requirements
 
 * JupyterLab >= 4.0.0
+* Notebook 7 / Jupyter Server
 
 ## Install
 
         $ pip install git+https://github.com/NII-cloud-operation/Jupyter-LC_nblineage
 
-To use nblineage extension you will also need to install and enable, you can use Jupyter subcommand:
+To enable the server extension, use:
 
         $ jupyter nblineage quick-setup
 
-then restart Jupyter notebook.
+then restart JupyterLab or Notebook 7.
 
-To disable and uninstall this extension, use:
+To disable the server extension, use:
 
         $ jupyter nblineage quick-remove
 
