@@ -3,66 +3,46 @@ import sys
 import io
 
 from ._version import __version__
-
-from nbclassic.nbextensions import (InstallNBExtensionApp, EnableNBExtensionApp,
-    DisableNBExtensionApp, UninstallNBExtensionApp)
-
-from jupyter_core.application import JupyterApp
-try:
-    from jupyter_server.extension.serverextension import BaseExtensionApp
-except ImportError:
-    from nbclassic.extensions import BaseNBExtensionApp
-    BaseExtensionApp = BaseNBExtensionApp
-
-# from notebook import nbextensions
 from jupyter_server.extension.serverextension import (
+    BaseExtensionApp,
+    DisableServerExtensionApp,
     EnableServerExtensionApp,
-    DisableServerExtensionApp)
+)
 
 from traitlets.config.application import catch_config_error
 from traitlets.config.application import Application
-from traitlets import Unicode, Dict, List
+from traitlets import Dict, List
 
 import nbformat
 from . import meme
 
+
+def _with_package_argv(argv):
+    return list(argv) + ['--py', 'nblineage']
+
+
+def _run_app(app_cls, argv):
+    app = app_cls()
+    app.initialize(argv)
+    app.start()
+
 class ExtensionQuickSetupApp(BaseExtensionApp):
-    """Installs and enables all parts of this extension"""
+    """Enable the server extension for Notebook 7 / JupyterLab."""
     name = "jupyter nblineage quick-setup"
     version = __version__
-    description = "Installs and enables all features of the nblineage extension"
+    description = "Enable the nblineage server extension"
 
     def start(self):
-        self.argv.extend(['--py', 'nblineage'])
-
-        install = EnableServerExtensionApp()
-        install.initialize(self.argv)
-        install.start()
-        install = InstallNBExtensionApp()
-        install.initialize(self.argv)
-        install.start()
-        enable = EnableNBExtensionApp()
-        enable.initialize(self.argv)
-        enable.start()
+        _run_app(EnableServerExtensionApp, _with_package_argv(self.argv))
 
 class ExtensionQuickRemovalApp(BaseExtensionApp):
-    """Disables and uninstalls all parts of this extension"""
+    """Disable the server extension for Notebook 7 / JupyterLab."""
     name = "jupyter nblineage quick-remove"
     version = __version__
-    description = "Disables and removes all features of the nblineage extension"
+    description = "Disable the nblineage server extension"
 
     def start(self):
-        self.argv.extend(['--py', 'nblineage'])
-
-        disable = DisableNBExtensionApp()
-        disable.initialize(self.argv)
-        disable.start()
-        uninstall = UninstallNBExtensionApp()
-        uninstall.initialize(self.argv)
-        uninstall.start()
-        uninstall = DisableServerExtensionApp()
-        uninstall.initialize(self.argv)
-        uninstall.start()
+        _run_app(DisableServerExtensionApp, _with_package_argv(self.argv))
 
 class NewRootMemeApp(Application):
     """Generate a new root meme notebook"""
